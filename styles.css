@@ -1,0 +1,56 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    background-image: url(assets/jail.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column; /* Arrange forms vertically */
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Add space between the two forms */
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Common styles for input fields */
+input[type="text"], input[type="password"] {
+    width: 400px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Buttons styling */
+input[type="button"] {
+    width: 400px;
+    height: 40px;
+    background-color: rgb(255, 85, 0);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input[type="button"]:hover {
+    background-color: rgb(255, 100, 20);
+}
+
+/* Styling individual form sections */
+.regDiv, .loginDiv {
+    text-align: center;
+}

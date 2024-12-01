@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+ <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Diddy's Login Page</title>
+</head>
+<body onload="logAllUserPrefs()">
+    <div class="wrapper">
+        <!-- Registration Form -->
+        <div class="regDiv">
+            <form id="registerForm">
+                <input id="newUsername" type="text" placeholder="New Username"><br>
+                <input id="newPassword" type="password" placeholder="New Password"><br><br>
+                <input id="Register" type="button" value="Register" onclick="register()">
+            </form>
+        </div>
+
+        <!-- Login Form -->
+        <div class="loginDiv">
+            <form>
+                <input id="username" type="text" placeholder="Username"><br>
+                <input id="password" type="password" placeholder="******"><br><br>
+                <input id="log" type="button" value="Login" onclick="login()">
+            </form>
+        </div>
+        
+        <!--reset all user and their prefs-->
+        <div class="resetDiv">
+          <button id="reset" onclick="resetAll()">Reset All Users and Preferences</button>
+      </div>
+
+    </div>
+
+    <script src="backend/loadGenres.js"></script>
+    <script src="backend/userRegisterLogin.js"></script>
+
+</body>
+</html>
