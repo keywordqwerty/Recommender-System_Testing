@@ -1,0 +1,2 @@
+problem with gameGenres.json is that it somehow has a priority on the games that is on the most top of the list 
+idk how to fix that so ill get back to it soon

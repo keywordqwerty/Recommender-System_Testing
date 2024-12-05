@@ -70,7 +70,7 @@ images.forEach(function(image){
     }
 
    
-     //if the pcounter reaches 6 then finalize button will appear and you will not be able to click new games
+     //if pcounter reaches 6 then finalize button will appear and you will not be able to click new games
     if(pCounter === 6 && hasDisplay !== 1){
         modal.style.display = 'flex';
         hasDisplay = 1;

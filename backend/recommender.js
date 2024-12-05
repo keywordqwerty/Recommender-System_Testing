@@ -2,11 +2,12 @@ import { gameGenres } from './loadGenres.js';
 import { displayrecomms } from './displays.js';
 
 
-//jaccard similarity alg
-function jaccardSimilarity(setA, setB){
-    const intersection = new Set([...setA].filter(x => setB.has(x)));
-    const union = new Set([...setA, ...setB]);
-    return intersection.size / union.size;
+// Cosine similarity function
+function cosineSimilarity(vecA, vecB) {
+    const dotProduct = vecA.reduce((sum, val, i) => sum + val * vecB[i], 0);
+    const magnitudeA = Math.sqrt(vecA.reduce((sum, val) => sum + val * val, 0));
+    const magnitudeB = Math.sqrt(vecB.reduce((sum, val) => sum + val * val, 0));
+    return dotProduct / (magnitudeA * magnitudeB);
 }
 
 
@@ -15,16 +16,21 @@ function jaccardSimilarity(setA, setB){
 
 // Get similar users based on preference of similar user preferences
 function getSimilarUsers(currentUser, userPrefs) {
+    const allGames = Object.keys(gameGenres);
     const currentUserPrefs = userPrefs[currentUser];
-    const currentUserGenres = new Set(Object.keys(currentUserPrefs).flatMap(genre => currentUserPrefs[genre]));
+    const currentUserVector = allGames.map(game => {
+        return Object.values(currentUserPrefs).flat().includes(game) ? 1 : 0;
+    });
 
     let similarityScores = {};
 
     Object.keys(userPrefs).forEach(user => {
         if (user !== currentUser) {
             const otherUserPrefs = userPrefs[user];
-            const otherUserGenres = new Set(Object.keys(otherUserPrefs).flatMap(genre => otherUserPrefs[genre]));
-            const similarity = jaccardSimilarity(currentUserGenres, otherUserGenres);
+            const otherUserVector = allGames.map(game => {
+                return Object.values(otherUserPrefs).flat().includes(game) ? 1 : 0;
+            });
+            const similarity = cosineSimilarity(currentUserVector, otherUserVector);
             similarityScores[user] = similarity;
         }
     });
@@ -146,4 +152,4 @@ function recommenderSys(picked) {
 
 
 
-export { jaccardSimilarity, getSimilarUsers, recommendGamesForUser, recommenderSys };
+export { cosineSimilarity, getSimilarUsers, recommendGamesForUser, recommenderSys };
