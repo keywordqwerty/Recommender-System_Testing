@@ -7,7 +7,10 @@ function cosineSimilarity(vecA, vecB) {
     const dotProduct = vecA.reduce((sum, val, i) => sum + val * vecB[i], 0);
     const magnitudeA = Math.sqrt(vecA.reduce((sum, val) => sum + val * val, 0));
     const magnitudeB = Math.sqrt(vecB.reduce((sum, val) => sum + val * val, 0));
-    return dotProduct / (magnitudeA * magnitudeB);
+    const similarity = dotProduct /(magnitudeA * magnitudeB); //NEW
+    console.log("COSINE CHECK: ", Math.min(similarity,1));
+     return Math.min(similarity, 1); 
+    //return dotProduct / (magnitudeA * magnitudeB);
 }
 
 
@@ -22,7 +25,7 @@ function getSimilarUsers(currentUser, userPrefs) {
         return Object.values(currentUserPrefs).flat().includes(game) ? 1 : 0;
     });
 
-    let similarityScores = {};
+    let similarityScores = [];
 
     Object.keys(userPrefs).forEach(user => {
         if (user !== currentUser) {
@@ -31,15 +34,19 @@ function getSimilarUsers(currentUser, userPrefs) {
                 return Object.values(otherUserPrefs).flat().includes(game) ? 1 : 0;
             });
             const similarity = cosineSimilarity(currentUserVector, otherUserVector);
-            similarityScores[user] = similarity;
+            if (similarity > 0.1 || similarity < 1){ // Adjust this threshold as needed
+                similarityScores.push({ user, similarity });
+            }
         }
     });
 
-    // Define a similarity threshold
-    const similarityThreshold = 0.1; // Adjust this value as needed
+    //logging scores
+    similarityScores.forEach(score => {
+        console.log(`similarity score for ${currentUser} and ${score.user}:`, score.similarity);
+    });
 
-    // Find all users with similarity above the threshold
-    return Object.keys(similarityScores).filter(user => similarityScores[user] > similarityThreshold);
+    console.log(`Similar users for ${currentUser}:`, similarityScores);
+    return similarityScores;
 }
 
 
@@ -56,8 +63,12 @@ function getSimilarUsers(currentUser, userPrefs) {
 
     const recommendations = new Set(); // Use a Set to avoid duplicates
 
-    similarUsers.forEach(similarUsers => {
-        const similarUserPrefs = userPrefs[similarUsers];
+    // Sort similar users by their similarity scores in descending order
+    similarUsers.sort((a, b) => b.similarity - a.similarity);
+
+    // Iterate through the sorted similar users and collect recommendations
+    for (const similarUser of similarUsers) {
+        const similarUserPrefs = userPrefs[similarUser.user];
         Object.keys(similarUserPrefs).forEach(genre => {
             similarUserPrefs[genre].forEach(gameId => {
                 if (!currentUserGenres.has(gameId)) {
@@ -65,7 +76,13 @@ function getSimilarUsers(currentUser, userPrefs) {
                 }
             });
         });
-    });
+
+        // Break if we have enough recommendations
+        if (recommendations.size >= 6) {
+            break;
+        }
+    }
+
 
     console.log(`Recommended games for user ${currentUser} based on preferences of similar users:`, Array.from(recommendations));
     displayrecomms(Array.from(recommendations));
