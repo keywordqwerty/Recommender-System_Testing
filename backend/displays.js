@@ -42,7 +42,7 @@ function displayrecomms(recommendations) {
     recommendedContainer.style.marginTop = '20px';
 
     // Limit to top 6 recommendations
-    const topRecommendations = recommendations.slice(0, 6);
+    const topRecommendations = recommendations.slice(0, 10);
 
     topRecommendations.forEach(game => {
         console.log("LINE 128 displaying each game recommended: ", game);
