@@ -34,7 +34,7 @@ function getSimilarUsers(currentUser, userPrefs) {
                 return Object.values(otherUserPrefs).flat().includes(game) ? 1 : 0;
             });
             const similarity = cosineSimilarity(currentUserVector, otherUserVector);
-            if (similarity > 0.1 || similarity < 1){ // Adjust this threshold as needed
+            if (similarity > 0.1 && similarity < 1){ // Adjust this threshold as needed
                 similarityScores.push({ user, similarity });
             }
         }
@@ -153,7 +153,7 @@ function recommenderSys(picked) {
             //new 
             console.log("collaborative filtering entered");
             const similarUsers = getSimilarUsers(user, userPrefs); // Call getSimilarUsers to get the list of similar users
-            if(similarUsers.length >= 1){
+            if(similarUsers.length > 0){
                 console.log("enough users for collaborative filter.");
             recommendGamesForUser(user, userPrefs,similarUsers); // Pass similarUsers correctly
         } else {
